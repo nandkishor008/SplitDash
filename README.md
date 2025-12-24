@@ -1,6 +1,6 @@
 # SplitDash –  Group Expense Tracker
 
-SplitDash is a full-stack web application that helps groups track shared expenses, split bills using different methods, and see simplified balances between members. It is inspired by Splitwise but built as a custom project using a modern MERN-style stack.
+SplitDash is a full-stack web application that helps groups track shared expenses, split bills using different methods, and see simplified balances between members. 
 
 ---
 
