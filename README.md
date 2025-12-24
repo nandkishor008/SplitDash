@@ -219,15 +219,7 @@ Adjust these to match your actual routes.
 
 ---
 
-## Running the Project Locally
 
-### Prerequisites
-
-- Node.js and npm installed.
-- MongoDB (or another configured DB) running or accessible.
-- Environment variables set for the backend (e.g., `MONGO_URI`).
-
-### Backend
 
 cd backend
 npm install
