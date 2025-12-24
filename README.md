@@ -4,6 +4,13 @@ SplitDash is a full-stack web application that helps groups track shared expense
 
 ---
 
+## Live Deployment
+Frontend: https://main.d2ohij8v8olini.amplifyapp.com/
+
+Backend API: https://splitdash.onrender.com/api
+
+Source Code: https://github.com/nandkishor008/SplitDash
+
 ## Features
 
 ### Core features
@@ -78,7 +85,7 @@ SplitDash is a full-stack web application that helps groups track shared expense
 
 ---
 
-## Project Structure 
+
 
 ## Key Frontend Components
 
@@ -195,7 +202,7 @@ Adjust these to match your actual routes.
 ---
 
 
-## Running the Project Locally
+## Production Deployment
 
 ### AWS Amplify (Frontend) – LIVE
 
