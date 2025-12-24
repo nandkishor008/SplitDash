@@ -79,28 +79,30 @@ SplitDash is a full-stack web application that helps groups track shared expense
 ---
 
 ## Project Structure 
-splitDash/
-backend/
-src/
-models/
-routes/
-controllers/
-index.js # Express app entry
-package.json
-frontend/
-src/
-api/
-axiosClient.js
-components/
-Sidebar.jsx
-GroupHeader.jsx
-ExpenseModal.jsx
-BalancesCard.jsx
-App.jsx
-index.js
-styles.css
-package.json
-README.md
+
+SplitDash/
+├── frontend/                 # React App (AWS Amplify)
+│   ├── src/
+│   │   ├── api/
+│   │   │   └── axiosClient.js
+│   │   ├── components/
+│   │   │   ├── Sidebar.js
+│   │   │   ├── Navbar.js
+│   │   │   ├── GroupCard.js
+│   │   │   ├── ExpenseForm.js
+│   │   │   ├── ExpenseTable.js
+│   │   │   ├── BalanceSummary.js
+│   │   │   └── SettleModal.js
+│   │   └── pages/
+│   │       └── DashboardPage.js
+│   ├── package.json
+│   └── amplify.yml
+├── backend/                  # Node.js API (Render)
+│   ├── models/               # User, Group, Expense
+│   ├── routes/               # API routes
+│   ├── controllers/
+│   └── server.js
+└── README.md
 
 
 
@@ -220,9 +222,28 @@ Adjust these to match your actual routes.
 ---
 
 
+## Running the Project Locally
+
+### AWS Amplify (Frontend) – LIVE
+
+Connected to GitHub → Auto-deploys on push
+Build: npm ci && npm run build
+Output: frontend/build
+Domain: https://main.d2ohij8v8olini.amplifyapp.com/
+
+
+### Render (Backend) – LIVE
+
+Connected to GitHub → Auto-deploys on push
+Build: npm install
+Start: npm start
+Domain: https://splitdash.onrender.com/api
 
 
 
 
-### Frontend
+
+
+
+
 
