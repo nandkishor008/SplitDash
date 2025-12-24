@@ -221,9 +221,7 @@ Adjust these to match your actual routes.
 
 
 
-cd backend
-npm install
-npm start
+
 
 
 ### Frontend
