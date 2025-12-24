@@ -80,33 +80,6 @@ SplitDash is a full-stack web application that helps groups track shared expense
 
 ## Project Structure 
 
-SplitDash/
-├── frontend/                 # React App (AWS Amplify)
-│   ├── src/
-│   │   ├── api/
-│   │   │   └── axiosClient.js
-│   │   ├── components/
-│   │   │   ├── Sidebar.js
-│   │   │   ├── Navbar.js
-│   │   │   ├── GroupCard.js
-│   │   │   ├── ExpenseForm.js
-│   │   │   ├── ExpenseTable.js
-│   │   │   ├── BalanceSummary.js
-│   │   │   └── SettleModal.js
-│   │   └── pages/
-│   │       └── DashboardPage.js
-│   ├── package.json
-│   └── amplify.yml
-├── backend/                  # Node.js API (Render)
-│   ├── models/               # User, Group, Expense
-│   ├── routes/               # API routes
-│   ├── controllers/
-│   └── server.js
-└── README.md
-
-
-
-
 ## Key Frontend Components
 
 ### `Sidebar.jsx`
