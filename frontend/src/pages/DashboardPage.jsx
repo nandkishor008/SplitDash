@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { trackEvent } from "../analytics";  // NEW
 import axiosClient from "../api/axiosClient";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
@@ -20,6 +21,9 @@ const DashboardPage = ({ owner, onLogout }) => {
 
   const fetchGroupData = useCallback(async (group) => {
     if (!group?._id) return;
+    
+    trackEvent("view_group", "group", group.name);  // NEW
+    
     const [eRes, bRes, gRes] = await Promise.all([
       axiosClient.get(`/expenses/group/${group._id}`),
       axiosClient.get(`/balances/group/${group._id}`),
@@ -31,14 +35,17 @@ const DashboardPage = ({ owner, onLogout }) => {
   }, []);
 
   const handleGroupSelected = (group) => {
+    trackEvent("select_group", "group", group.name);  // NEW
     fetchGroupData(group).catch(console.error);
   };
 
   const handleExpenseAdded = () => {
+    trackEvent("add_expense", "expense", "Expense added");  // NEW
     if (currentGroup) fetchGroupData(currentGroup).catch(console.error);
   };
 
   const handleDeleteExpense = async (id) => {
+    trackEvent("delete_expense", "expense", "Expense deleted");  // NEW
     await axiosClient.delete(`/expenses/${id}`);
     if (currentGroup) fetchGroupData(currentGroup).catch(console.error);
   };
@@ -69,7 +76,10 @@ const DashboardPage = ({ owner, onLogout }) => {
               group={currentGroup}
               users={friends}
               pairwise={balances.pairwise}
-              onAfterSettle={() => fetchGroupData(currentGroup)}
+              onAfterSettle={() => {
+                trackEvent("settle_payment", "expense", "Payments settled");  // NEW
+                fetchGroupData(currentGroup);
+              }}
             />
             <ExpenseTable expenses={expenses} onDelete={handleDeleteExpense} />
           </>
