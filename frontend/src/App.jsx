@@ -2,61 +2,82 @@ import React, { useState, useEffect } from "react";
 import "./styles.css";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
-import { trackEvent, trackPage } from "./analytics";  // NEW
+import LandingPage from "./pages/LandingPage";
+import SharedGroupPage from "./pages/SharedGroupPage";
+import { trackEvent, trackPage } from "./analytics";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 const STORAGE_KEY = "splitdash_owner";
 
 const App = () => {
   const [owner, setOwner] = useState(null);
-  const [currentPage, setCurrentPage] = useState("login");  // NEW
+  const [showLogin, setShowLogin] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Track initial page
-    trackPage(currentPage);  // NEW
+    trackPage("landing");
 
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        setOwner(JSON.parse(stored));
-        setCurrentPage("dashboard");  // NEW
-        trackPage("dashboard");  // NEW
+        const user = JSON.parse(stored);
+        setOwner(user);
+        trackPage("dashboard");
+        navigate("/"); // go to dashboard
       }
     } catch (e) {
-      console.error("Failed to read owner from storage", e);
+      console.error("Failed to read owner", e);
     }
-  }, []);
+  }, [navigate]);
+
+  const handleStart = () => {
+    setShowLogin(true);
+    trackPage("login");
+  };
 
   const handleLoggedIn = (user) => {
     setOwner(user);
-    setCurrentPage("dashboard");  // NEW
-    trackEvent("signup", "auth", "User signed up");  // NEW
-    trackPage("dashboard");  // NEW
-    
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-    } catch (e) {
-      console.error("Failed to save owner to storage", e);
-    }
+    trackEvent("signup", "auth", "User signed up");
+    trackPage("dashboard");
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    setShowLogin(false);
+    navigate("/");
   };
 
   const handleLogout = () => {
-    trackEvent("logout", "auth", "User logged out");  // NEW
+    trackEvent("logout", "auth", "User logged out");
     setOwner(null);
-    setCurrentPage("login");  // NEW
-    trackPage("login");  // NEW
-    
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-    } catch (e) {
-      console.error("Failed to clear owner from storage", e);
-    }
+    localStorage.removeItem(STORAGE_KEY);
+    trackPage("landing");
+    navigate("/");
   };
 
-  if (!owner) {
-    return <LoginPage onLoggedIn={handleLoggedIn} />;
-  }
+  return (
+    <Routes>
+      {/* Shared link route */}
+      <Route path="/share/:token" element={<SharedGroupPage />} />
 
-  return <DashboardPage owner={owner} onLogout={handleLogout} />;
+      {/* Main app */}
+      <Route
+        path="/"
+        element={
+          owner ? (
+            <DashboardPage owner={owner} onLogout={handleLogout} />
+          ) : (
+            <>
+              <LandingPage onStart={handleStart} />
+              {showLogin && (
+                <LoginPage
+                  onLoggedIn={handleLoggedIn}
+                  onClose={() => setShowLogin(false)}
+                />
+              )}
+            </>
+          )
+        }
+      />
+    </Routes>
+  );
 };
 
 export default App;

@@ -19,3 +19,22 @@ export const getFriendsByOwner = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const deleteFriend = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // ✅ Standard Delete: We remove the profile, but we intentionally
+    // DO NOT go into Groups/Expenses to remove the ID.
+    // This preserves the history. The other controllers handle the missing ID safely.
+    const deleted = await Friend.findByIdAndDelete(id);
+
+    if (!deleted) {
+      return res.status(404).json({ message: "Friend not found" });
+    }
+
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete friend" });
+  }
+};

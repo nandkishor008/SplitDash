@@ -1,8 +1,15 @@
+// Sidebar.jsx
 import React, { useState, useEffect } from "react";
 import axiosClient from "../api/axiosClient";
 import { FaWallet } from "react-icons/fa";
 
-const Sidebar = ({ owner, onGroupSelected, onFriendsLoaded }) => {
+const Sidebar = ({
+  owner,
+  onGroupSelected,
+  onFriendsLoaded,
+  mobileOpen,
+  setMobileOpen,
+}) => {
   const [friends, setFriends] = useState([]);
   const [groups, setGroups] = useState([]);
   const [showFriendModal, setShowFriendModal] = useState(false);
@@ -62,172 +69,257 @@ const Sidebar = ({ owner, onGroupSelected, onFriendsLoaded }) => {
     setMemberIds([]);
     setShowGroupModal(false);
     onGroupSelected(res.data);
+    // close drawer on mobile after creating group
+    if (typeof setMobileOpen === "function") setMobileOpen(false);
   };
 
   return (
-    <aside className="sidebar">
-      <div className="sidebar-logo">
-        <FaWallet /> Split<span>Dash</span>
-      </div>
+    <>
+      {/* Mobile dark overlay */}
+      <div
+        className={`mobile-overlay ${mobileOpen ? "open" : ""}`}
+        onClick={() => setMobileOpen(false)}
+      />
 
-      {/* Friends section */}
-      <div>
-        <div className="sidebar-section-title">Friends</div>
-        <button
-          className="btn btn-secondary"
-          onClick={() => setShowFriendModal(true)}
-        >
-          + Add friend
-        </button>
+      <aside className={`sidebar ${mobileOpen ? "open" : ""}`}>
+        <div className="sidebar-header">
+          <div className="sidebar-logo">
+            <FaWallet /> Split<span>Dash</span>
+          </div>
+          {/* Close button only visible on mobile via CSS */}
+          <button
+            className="mobile-close-btn"
+            onClick={() => setMobileOpen(false)}
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Friends section */}
+        <div>
+          <div className="sidebar-section-title">Friends</div>
+          <button
+            className="btn btn-secondary"
+            onClick={() => setShowFriendModal(true)}
+          >
+            + Add friend
+          </button>
+          <div
+            className="scroll-section"
+            style={{
+              marginTop: "0.5rem",
+              maxHeight: 130,
+              fontSize: "0.85rem",
+              color: "#9ca3af",
+            }}
+          >
+            {friends.length === 0 && (
+              <div>No friends yet. Add your group.</div>
+            )}
+            {friends.map((f) => (
+              <div
+                key={f._id}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "4px 2px",
+                }}
+              >
+                <span>{f.name}</span>
+                <button
+                  className="delete-btn"
+                  title="Delete friend"
+                  onClick={async () => {
+                    const ok = window.confirm(`Delete friend "${f.name}"?`);
+                    if (!ok) return;
+
+                    await axiosClient.delete(`/friends/${f._id}`);
+
+                    const updated = friends.filter((x) => x._id !== f._id);
+                    setFriends(updated);
+                    onFriendsLoaded(updated);
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Groups section */}
+        <div style={{ marginTop: "1rem" }}>
+          <div className="sidebar-section-title">Groups</div>
+          <button
+            className="btn btn-secondary"
+            onClick={() => setShowGroupModal(true)}
+          >
+            + New group
+          </button>
+        </div>
+
         <div
           className="scroll-section"
-          style={{
-            marginTop: "0.5rem",
-            maxHeight: 130,
-            fontSize: "0.85rem",
-            color: "#9ca3af",
-          }}
+          style={{ flex: 1, marginTop: "0.75rem", maxHeight: 220 }}
         >
-          {friends.length === 0 && <div>No friends yet. Add your group.</div>}
-          {friends.map((f) => (
-            <div key={f._id}>{f.name}</div>
+          {groups.map((g) => (
+            <div
+              key={g._id}
+              style={{
+                padding: "0.55rem 0.4rem",
+                borderRadius: "0.75rem",
+                marginBottom: "0.35rem",
+                border: "1px solid #111827",
+                background: "#020617",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <div
+                onClick={() => {
+                  onGroupSelected(g);
+                  // close drawer when selecting group on mobile
+                  if (typeof setMobileOpen === "function") setMobileOpen(false);
+                }}
+                style={{ cursor: "pointer" }}
+              >
+                <div style={{ fontSize: "0.9rem", fontWeight: 500 }}>
+                  {g.name}
+                </div>
+                <div style={{ fontSize: "0.75rem", color: "#9ca3af" }}>
+                  {g.members?.length || 0} members
+                </div>
+              </div>
+
+              <button
+                className="delete-btn"
+                title="Delete group"
+                onClick={async (e) => {
+                  e.stopPropagation();
+
+                  const ok = window.confirm(
+                    `Are you sure you want to delete "${g.name}"?\n\nThis will delete all expenses of this group.`
+                  );
+                  if (!ok) return;
+
+                  await axiosClient.delete(`/groups/${g._id}`);
+
+                  const updated = groups.filter((x) => x._id !== g._id);
+                  setGroups(updated);
+
+                  if (updated.length > 0) {
+                    onGroupSelected(updated[0]);
+                  } else {
+                    onGroupSelected(null);
+                  }
+                }}
+              >
+                ✕
+              </button>
+            </div>
           ))}
         </div>
-      </div>
 
-      {/* Groups section */}
-      <div style={{ marginTop: "1rem" }}>
-        <div className="sidebar-section-title">Groups</div>
-        <button
-          className="btn btn-secondary"
-          onClick={() => setShowGroupModal(true)}
-        >
-          + New group
-        </button>
-      </div>
-
-      <div
-        className="scroll-section"
-        style={{ flex: 1, marginTop: "0.75rem", maxHeight: 220 }}
-      >
-        {groups.map((g) => (
+        {/* Modals remain same */}
+        {showFriendModal && (
           <div
-            key={g._id}
-            style={{
-              padding: "0.55rem 0.4rem",
-              borderRadius: "0.75rem",
-              cursor: "pointer",
-              marginBottom: "0.35rem",
-              border: "1px solid #111827",
-              background: "#020617",
-            }}
-            onClick={() => onGroupSelected(g)}
+            className="modal-backdrop"
+            onClick={() => setShowFriendModal(false)}
           >
-            <div style={{ fontSize: "0.9rem", fontWeight: 500 }}>{g.name}</div>
-            <div style={{ fontSize: "0.75rem", color: "#9ca3af" }}>
-              {g.members?.length || 0} members
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Add Friend Modal */}
-      {showFriendModal && (
-        <div
-          className="modal-backdrop"
-          onClick={() => setShowFriendModal(false)}
-        >
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h3 style={{ marginTop: 0 }}>Add friend</h3>
-            <div className="form-group">
-              <label>Friend name</label>
-              <input
-                className="input"
-                value={newFriendName}
-                onChange={(e) => setNewFriendName(e.target.value)}
-                placeholder="Name of your friend"
-              />
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                marginTop: "0.75rem",
-                gap: "0.5rem",
-              }}
-            >
-              <button
-                className="btn btn-secondary"
-                onClick={() => setShowFriendModal(false)}
-              >
-                Cancel
-              </button>
-              <button className="btn" onClick={handleAddFriend}>
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Create Group Modal */}
-      {showGroupModal && (
-        <div
-          className="modal-backdrop"
-          onClick={() => setShowGroupModal(false)}
-        >
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h3 style={{ marginTop: 0 }}>Create group</h3>
-            <div className="form-group">
-              <label>Group name</label>
-              <input
-                className="input"
-                value={newGroupName}
-                onChange={(e) => setNewGroupName(e.target.value)}
-                placeholder="Title of the group"
-              />
-            </div>
-            <div className="form-group">
-              <label>Members</label>
-              <div className="chip-row">
-                {friends.map((f) => (
-                  <div
-                    key={f._id}
-                    className={
-                      "chip " + (memberIds.includes(f._id) ? "chip-active" : "")
-                    }
-                    onClick={() => toggleMember(f._id)}
-                  >
-                    {f.name}
-                  </div>
-                ))}
+            <div className="modal" onClick={(e) => e.stopPropagation()}>
+              <h3 style={{ marginTop: 0 }}>Add friend</h3>
+              <div className="form-group">
+                <label>Friend name</label>
+                <input
+                  className="input"
+                  value={newFriendName}
+                  onChange={(e) => setNewFriendName(e.target.value)}
+                  placeholder="Name of your friend"
+                />
               </div>
-              <div className="help-text">
-                Select friends who were part of this trip.
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginTop: "0.75rem",
+                  gap: "0.5rem",
+                }}
+              >
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setShowFriendModal(false)}
+                >
+                  Cancel
+                </button>
+                <button className="btn" onClick={handleAddFriend}>
+                  Save
+                </button>
               </div>
             </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                marginTop: "0.75rem",
-                gap: "0.5rem",
-              }}
-            >
-              <button
-                className="btn btn-secondary"
-                onClick={() => setShowGroupModal(false)}
+          </div>
+        )}
+
+        {showGroupModal && (
+          <div
+            className="modal-backdrop"
+            onClick={() => setShowGroupModal(false)}
+          >
+            <div className="modal" onClick={(e) => e.stopPropagation()}>
+              <h3 style={{ marginTop: 0 }}>Create group</h3>
+              <div className="form-group">
+                <label>Group name</label>
+                <input
+                  className="input"
+                  value={newGroupName}
+                  onChange={(e) => setNewGroupName(e.target.value)}
+                  placeholder="Title of the group"
+                />
+              </div>
+              <div className="form-group">
+                <label>Members</label>
+                <div className="chip-row">
+                  {friends.map((f) => (
+                    <div
+                      key={f._id}
+                      className={
+                        "chip " +
+                        (memberIds.includes(f._id) ? "chip-active" : "")
+                      }
+                      onClick={() => toggleMember(f._id)}
+                    >
+                      {f.name}
+                    </div>
+                  ))}
+                </div>
+                <div className="help-text">
+                  Select friends who were part of this trip.
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginTop: "0.75rem",
+                  gap: "0.5rem",
+                }}
               >
-                Cancel
-              </button>
-              <button className="btn" onClick={handleCreateGroup}>
-                Create
-              </button>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setShowGroupModal(false)}
+                >
+                  Cancel
+                </button>
+                <button className="btn" onClick={handleCreateGroup}>
+                  Create
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </aside>
+        )}
+      </aside>
+    </>
   );
 };
 

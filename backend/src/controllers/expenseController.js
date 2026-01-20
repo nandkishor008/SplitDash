@@ -48,7 +48,28 @@ export const getExpensesByGroup = async (req, res) => {
       .populate("paidBy", "name")
       .populate("participants.user", "name")
       .sort({ createdAt: -1 });
-    res.json(expenses);
+
+    // ✅ SAFETY FIX: Sanitize the output
+    // If a user was deleted, Mongoose populate returns null.
+    // We replace null with a placeholder object so the Frontend doesn't crash.
+    const safeExpenses = expenses.map(e => {
+      const doc = e.toObject(); // Convert to plain JS object
+
+      // Fix missing payer
+      if (!doc.paidBy) {
+        doc.paidBy = { _id: "deleted", name: "Unknown/Deleted User" };
+      }
+
+      // Fix missing participants
+      doc.participants = doc.participants.map(p => ({
+        ...p,
+        user: p.user || { _id: "deleted", name: "Unknown/Deleted User" }
+      }));
+
+      return doc;
+    });
+
+    res.json(safeExpenses);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -66,4 +87,3 @@ export const deleteExpense = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
