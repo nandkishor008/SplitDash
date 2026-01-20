@@ -13,7 +13,8 @@ const Navbar = ({ currentGroupName, owner, onLogout }) => {
         <div className="navbar-title">
           {currentGroupName || "Your expense dashboard"}
         </div>
-        <div className="navbar-sub">
+        {/* ADDED mobile-hide class */}
+        <div className="navbar-sub mobile-hide">
           Track groups, expenses, and simplified balances in one place.
         </div>
       </div>

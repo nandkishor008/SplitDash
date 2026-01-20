@@ -1347,3 +1347,10 @@ body {
   .group-actions-desktop { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 }
 
+
+@media (max-width: 900px) {
+  .mobile-hide {
+    display: none !important;
+  }
+}
+

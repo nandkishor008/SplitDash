@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import founderImg from "../assets/founder.jpeg";
+import founderImg from "../assets/founder.png";
 import productShot from "../assets/product.png";
 
 const FloatingOrb = ({ size, x, y, delay, color }) => (
@@ -192,16 +192,15 @@ const LandingPage = ({ onStart }) => {
         </div>
 
         <div className="social-links">
-          <a href="https://www.linkedin.com/in/YOUR_LINK" target="_blank">
+          <a href="https://www.linkedin.com/in/nandkishor-kumar-pandit-67514425a/" target="_blank">
             LinkedIn
           </a>
           <a href="https://github.com/nandkishor008" target="_blank">
             GitHub
           </a>
-          <a href="https://instagram.com/YOUR_ID" target="_blank">
+          <a href="https://www.instagram.com/kishornandu008?utm_source=qr&igsh=MWZ0ZmNxdnRodXByNg%3D%3D" target="_blank">
             Instagram
           </a>
-          <a href="mailto:YOUR_EMAIL@gmail.com">Email</a>
         </div>
       </div>
 
