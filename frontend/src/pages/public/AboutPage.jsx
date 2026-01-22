@@ -1,11 +1,19 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
+import { 
+  FaLinkedin, 
+  FaGithub, 
+  FaInstagram, 
+  FaLock, 
+  FaBolt, 
+  FaHandHoldingHeart 
+} from "react-icons/fa";
+
 import NavbarPublic from "../../components/NavbarPublic";
 import FooterPublic from "../../components/FooterPublic";
 import founderImg from "../../assets/founder.png"; 
 
-// --- COMPONENTS ---
 
 const SocialButton = ({ text, link }) => (
   <a 
@@ -33,15 +41,21 @@ const SocialButton = ({ text, link }) => (
 
 const ValueCard = ({ icon, title, desc }) => (
   <div style={{ 
-    background: "rgba(255,255,255,0.02)", 
+    background: "linear-gradient(145deg, rgba(255,255,255,0.03), transparent)", 
     padding: "30px", 
     borderRadius: "20px", 
-    border: "1px solid rgba(255,255,255,0.05)",
-    textAlign: "left"
-  }}>
-    <div style={{ fontSize: "2rem", marginBottom: "15px" }}>{icon}</div>
-    <h3 style={{ fontSize: "1.2rem", fontWeight: "bold", marginBottom: "10px", color: "#fff" }}>{title}</h3>
-    <p style={{ fontSize: "0.95rem", color: "#aaa", lineHeight: "1.6" }}>{desc}</p>
+    border: "1px solid rgba(255,255,255,0.08)",
+    textAlign: "left",
+    transition: "transform 0.2s ease",
+    height: "100%",
+    boxShadow: "0 10px 30px -10px rgba(0,0,0,0.3)"
+  }}
+  onMouseOver={(e) => e.currentTarget.style.transform = "translateY(-5px)"}
+  onMouseOut={(e) => e.currentTarget.style.transform = "translateY(0)"}
+  >
+    <div style={{ fontSize: "2rem", marginBottom: "20px", color: "#38bdf8" }}>{icon}</div>
+    <h3 style={{ fontSize: "1.3rem", fontWeight: "bold", marginBottom: "10px", color: "#fff" }}>{title}</h3>
+    <p style={{ fontSize: "0.95rem", color: "#a1a1aa", lineHeight: "1.6" }}>{desc}</p>
   </div>
 );
 
@@ -64,105 +78,84 @@ const AboutPage = () => {
   return (
     <>
       <Helmet>
-
         <title>About SplitDash - Founder & Mission</title>
-
         <meta name="description" content="Meet Nandkishor, the founder of SplitDash. Built at IIT Gandhinagar to make expense splitting simple and free." />
-
       </Helmet>
 
-      
-
       <div className="landing-pro" style={{ background: "#0f0f11", minHeight: "100vh", color: "white" }}>
-
         <NavbarPublic />
 
-        
-
         <div style={{ maxWidth: "900px", margin: "0 auto", padding: "140px 20px 60px", textAlign: "center" }}>
-
           
-
-          {/* HEADLINE */}
-
+         
           <h1 style={{ fontSize: "3rem", marginBottom: "10px", fontWeight: "bold" }}>What is SplitDash?</h1>
-
           <p style={{ fontSize: "1.2rem", color: "#22c55e", marginBottom: "60px", fontWeight: "500" }}>
-
             Simple. Fast. One Login. No Setup. No Friction.
-
           </p>
-
-          
-
-          {/* TEXT CONTENT (Centered & Clean) */}
-
+         
           <div style={{ fontSize: "1.1rem", lineHeight: "1.8", color: "#ccc", textAlign: "center", maxWidth: "800px", margin: "0 auto" }}>
-
             <p style={{ marginBottom: "20px" }}>
-
               SplitDash is a <b>smart group expense tracker</b> built for trips, roommates, and shared events where managing money should be easy — not complicated.
-
             </p>
-
             <p style={{ marginBottom: "20px" }}>
-
               The idea is simple: <b>only one person in the group needs to log in.</b> That person creates the group, adds friends, and starts adding expenses. Everyone else can use the same login or view the shared link to watch everything update in real time.
-
             </p>
-
             <p style={{ marginBottom: "40px" }}>
-
               No multiple accounts. No invitations. No verification emails. No passwords to remember. Just open SplitDash and start using it.
-
             </p>
-
-
 
             <p style={{ color: "#fff", fontWeight: "bold", marginBottom: "20px" }}>As you add expenses, SplitDash automatically calculates:</p>
-
             
-
             <ul style={{ listStyle: "none", padding: 0, marginBottom: "40px" }}>
-
               <li>✓ Who paid how much</li>
-
               <li>✓ Who owes how much</li>
-
               <li>✓ Who should pay whom</li>
-
             </ul>
 
-
-
             <p style={{ fontStyle: "italic", color: "#888", marginBottom: "80px" }}>
-
               No confusion. No awkward conversations. Just clean, instant settlements.
-
             </p>
-
           </div>
 
-          {/* NEW SECTION: CORE VALUES */}
-          <div style={{ marginBottom: "100px" }}>
-            <h2 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "40px" }}>Our Core Values</h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px", textAlign: "left" }}>
+      
+          <div style={{ marginBottom: "120px" }}>
+
+            <h2 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "40px", textAlign: "center" }}>Our Core Values</h2>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px" }}>
+
               <ValueCard 
-                icon="🛡️" 
+
+                icon={<FaLock />} 
+
                 title="Privacy First" 
+
                 desc="We don't sell data. We don't ask for bank passwords. Your financial privacy is our priority." 
+
               />
+
               <ValueCard 
-                icon="⚡" 
+
+                icon={<FaBolt />} 
+
                 title="Speed Matters" 
+
                 desc="Adding an expense should take 5 seconds, not 5 minutes. No loading screens, no ads." 
+
               />
+
               <ValueCard 
-                icon="💸" 
+
+                icon={<FaHandHoldingHeart />} 
+
                 title="Always Free" 
+
                 desc="Essential tools shouldn't have subscription fees. SplitDash is free for everyone, forever." 
+
               />
+
             </div>
+
           </div>
 
           {/* FOUNDER CARD */}
@@ -191,10 +184,8 @@ const AboutPage = () => {
                   IIT Gandhinagar
                 </p>
 
-               
-
                 <p style={{ color: "#aaa", fontSize: "1rem", lineHeight: "1.7", marginBottom: "30px", maxWidth: "500px", margin: "0 auto 30px" }}>
-                 Hi, I'm Nandkishor, the founder of SplitDash. I built SplitDash to
+                  Hi, I'm Nandkishor, the founder of SplitDash. I built SplitDash to
             solve the common hassles of splitting expenses with friends and
             roommates. As someone who has experienced the confusion and
             awkwardness that often comes with group expenses, I wanted to create
