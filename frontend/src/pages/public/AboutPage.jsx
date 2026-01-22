@@ -1,6 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom"; // Import Link for CTA
+import { Link } from "react-router-dom"; 
 import NavbarPublic from "../../components/NavbarPublic";
 import FooterPublic from "../../components/FooterPublic";
 import founderImg from "../../assets/founder.png"; 

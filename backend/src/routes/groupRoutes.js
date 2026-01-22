@@ -15,12 +15,12 @@ const router = express.Router();
 router.post("/", createGroup);
 router.get("/", getGroups);
 
-// 2. 🔗 SPECIFIC SHARE ROUTES (Must come BEFORE /:id)
+// 2.  SPECIFIC SHARE ROUTES (Must come BEFORE /:id)
 router.get("/share/:token", getGroupByShareToken);
 router.post("/:id/regenerate-link", regenerateShareLink);
 router.patch("/:id/share-settings", updateShareSettings);
 
-// 3. 🆔 GENERIC ID ROUTES (Must come LAST)
+// 3. GENERIC ID ROUTES (Must come LAST)
 router.get("/:id", getGroupById);
 router.delete("/:id", deleteGroup);
 

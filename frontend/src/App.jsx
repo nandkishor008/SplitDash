@@ -18,11 +18,11 @@ import { trackEvent, trackPage } from "./analytics";
 
 const STORAGE_KEY = "splitdash_owner";
 
-// Scroll to top helper
+
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   useEffect(() => {
-    // Only scroll to top if we are NOT opening the login modal
+    
     if (pathname !== "/login") {
       window.scrollTo(0, 0);
     }
@@ -72,12 +72,8 @@ const App = () => {
       <ScrollToTop />
       
       <Routes>
-        {/* --- Public Website Routes --- */}
-        
-        {/* 1. Normal Landing Page */}
+
         <Route path="/" element={!owner ? <LandingPage /> : <Navigate to="/dashboard" />} />
-        
-        {/* 2. Login Overlay Route */}
         <Route path="/login" element={
           !owner ? (
             <>
@@ -93,8 +89,6 @@ const App = () => {
         <Route path="/how-it-works" element={<HowItWorksPage />} />
         <Route path="/blog" element={<BlogPage />} />
         
-        {/* --- App (Protected) --- */}
-        {/* 👇 FIX APPLIED HERE: Redirect to "/" instead of "/login" */}
         <Route 
           path="/dashboard" 
           element={

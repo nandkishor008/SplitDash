@@ -15,7 +15,6 @@ const BalanceSummary = ({ balances, users }) => {
       </div>
 
       <div className="card-content" style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}>
-        {/* Per user table */}
         <div style={{ flex: 1, minWidth: "300px" }}>
           <div className="table-title">Per user breakdown</div>
           <div className="scroll-section">
@@ -23,7 +22,6 @@ const BalanceSummary = ({ balances, users }) => {
               <thead>
                 <tr>
                   <th>User</th>
-                  {/* 👇 Renamed Headers for clarity */}
                   <th style={{ color: "#ef4444" }}>To Pay ↘</th>
                   <th style={{ color: "#22c55e" }}>To Receive ↗</th>
                 </tr>
@@ -42,12 +40,11 @@ const BalanceSummary = ({ balances, users }) => {
                       <tr key={row.userId}>
                         <td>{u?.name || "Unknown"}</td>
                         
-                        {/* 👇 Red for "To Pay" */}
+                        
                         <td style={{ color: "#ef4444", fontWeight: "600" }}>
                           ₹{row.owes.toFixed(2)}
                         </td>
                         
-                        {/* 👇 Green for "To Receive" */}
                         <td style={{ color: "#22c55e", fontWeight: "600" }}>
                           ₹{row.owed.toFixed(2)}
                         </td>

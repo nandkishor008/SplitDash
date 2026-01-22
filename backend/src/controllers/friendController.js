@@ -24,9 +24,6 @@ export const deleteFriend = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // ✅ Standard Delete: We remove the profile, but we intentionally
-    // DO NOT go into Groups/Expenses to remove the ID.
-    // This preserves the history. The other controllers handle the missing ID safely.
     const deleted = await Friend.findByIdAndDelete(id);
 
     if (!deleted) {

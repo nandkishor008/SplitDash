@@ -22,7 +22,7 @@ const StepSection = ({ number, title, subtitle, text, image, isReversed }) => (
     flexWrap: "wrap"
   }}>
     
-    {/* Text Side */}
+   
     <div style={{ flex: 1, minWidth: "300px", textAlign: "left" }}>
       <div style={{ fontSize: "clamp(3rem, 5vw, 4rem)", fontWeight: "800", color: "rgba(255,255,255,0.05)", lineHeight: "0.8", marginBottom: "10px" }}>
         {number}
@@ -38,18 +38,16 @@ const StepSection = ({ number, title, subtitle, text, image, isReversed }) => (
       </p>
     </div>
 
-    {/* Image Side */}
+
     <div style={{ flex: 1.2, minWidth: "300px" }}>
       <div style={{ 
-        // --- PERFECTED STYLES ---
         background: "rgba(255,255,255,0.03)", 
         padding: "20px", 
         borderRadius: "24px", 
         border: "none", 
-        // Soft, diffused colored shadow (Glow Effect)
         boxShadow: isReversed 
-          ? "0 30px 80px -20px rgba(34, 197, 94, 0.2)"  // Green glow
-          : "0 30px 80px -20px rgba(56, 189, 248, 0.2)", // Blue glow
+          ? "0 30px 80px -20px rgba(34, 197, 94, 0.2)"  
+          : "0 30px 80px -20px rgba(56, 189, 248, 0.2)", 
         transform: "none", 
         transition: "transform 0.3s ease, box-shadow 0.3s ease"
       }}

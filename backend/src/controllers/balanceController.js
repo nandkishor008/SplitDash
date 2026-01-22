@@ -10,7 +10,6 @@ export const getGroupBalances = async (req, res) => {
 
     const expenses = await Expense.find({ group: groupId });
 
-    // Filter out any potential nulls if populate failed for some members
     const memberIds = group.members
       .filter((m) => m)
       .map((m) => m._id.toString());
@@ -22,14 +21,11 @@ export const getGroupBalances = async (req, res) => {
       balancesMap[key] = (balancesMap[key] || 0) + amount;
     };
 
-    // Build who owes whom from expenses
     expenses.forEach((e) => {
-      // ✅ SAFETY 1: Skip if payer was deleted
       if (!e.paidBy) return;
 
       const payer = e.paidBy.toString();
       e.participants.forEach((p) => {
-        // ✅ SAFETY 2: Skip if participant was deleted
         if (!p.user) return;
         
         const userId = p.user.toString();
@@ -37,12 +33,9 @@ export const getGroupBalances = async (req, res) => {
         addDebt(userId, payer, p.amount);
       });
     });
-
-    // Simplify debts
     const settlements = simplifyBalances(balancesMap);
 
     const balances = settlements.map((s) => {
-      // ✅ SAFETY 3: Find name, fallback to "Deleted User" if not found
       const fromMember = group.members.find((m) => m && m._id.toString() === s.from);
       const toMember = group.members.find((m) => m && m._id.toString() === s.to);
 
@@ -54,16 +47,12 @@ export const getGroupBalances = async (req, res) => {
         toName: toMember ? toMember.name : "Deleted User"
       };
     });
-
-    // Per-user owes / owed
     const perUser = {};
     memberIds.forEach((id) => {
       perUser[id] = { userId: id, owes: 0, owed: 0 };
     });
 
     balances.forEach((b) => {
-      // ✅ SAFETY 4: If user is deleted (not in perUser), add them dynamically
-      // This prevents the "Cannot read property of undefined" crash
       if (!perUser[b.from]) {
         perUser[b.from] = { userId: b.from, owes: 0, owed: 0 };
       }
@@ -75,7 +64,6 @@ export const getGroupBalances = async (req, res) => {
       perUser[b.to].owed += b.amount;
     });
 
-    // Pairwise map
     const pairwise = {};
     balances.forEach((b) => {
       pairwise[`${b.from}_${b.to}`] = b.amount;
@@ -92,7 +80,6 @@ export const getGroupBalances = async (req, res) => {
   }
 };
 
-// Manual settlement
 export const recordPayment = async (req, res) => {
   try {
     const { groupId, fromFriendId, toFriendId, amount } = req.body;
@@ -107,7 +94,6 @@ export const recordPayment = async (req, res) => {
     const group = await Group.findById(groupId).populate("members", "name");
     if (!group) return res.status(404).json({ message: "Group not found" });
 
-    // ✅ SAFETY 5: Handle deleted users in settlement recording
     const fromMember = group.members.find((m) => m && m._id.toString() === fromFriendId);
     const toMember = group.members.find((m) => m && m._id.toString() === toFriendId);
 

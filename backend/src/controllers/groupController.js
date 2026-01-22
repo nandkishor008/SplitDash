@@ -50,11 +50,10 @@ export const deleteGroup = async (req, res) => {
   }
 };
 
-// --- 🔗 Share System Logic ---
+// ---  Share System Logic ---
 
 export const getGroupByShareToken = async (req, res) => {
   try {
-    // Find group by the token
     const group = await Group.findOne({ shareToken: req.params.token })
       .populate("members", "name");
 
@@ -62,7 +61,6 @@ export const getGroupByShareToken = async (req, res) => {
       return res.status(404).json({ message: "Link invalid" });
     }
     
-    // Check if sharing is actually enabled
     if (!group.shareEnabled) {
       return res.status(403).json({ message: "Sharing is disabled for this group" });
     }
@@ -78,7 +76,6 @@ export const regenerateShareLink = async (req, res) => {
     const group = await Group.findById(req.params.id);
     if (!group) return res.status(404).json({ message: "Group not found" });
 
-    // Generate new random token
     group.shareToken = crypto.randomBytes(16).toString("hex");
     await group.save();
 
@@ -92,7 +89,6 @@ export const updateShareSettings = async (req, res) => {
   try {
     const { shareEnabled, sharePermission } = req.body;
 
-    // Validate permission enum if provided
     if (sharePermission && !["viewer", "editor"].includes(sharePermission)) {
       return res.status(400).json({ message: "Invalid permission level" });
     }
@@ -100,7 +96,7 @@ export const updateShareSettings = async (req, res) => {
     const group = await Group.findByIdAndUpdate(
       req.params.id,
       { shareEnabled, sharePermission },
-      { new: true } // Return updated doc
+      { new: true } 
     );
 
     if (!group) return res.status(404).json({ message: "Group not found" });

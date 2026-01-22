@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion"; 
-import { Link } from "react-router-dom"; // Ensure Link is imported
+import { Link } from "react-router-dom"; 
 import NavbarPublic from "../../components/NavbarPublic";
 import FooterPublic from "../../components/FooterPublic";
 
@@ -224,10 +224,9 @@ const BlogPage = () => {
             position: "relative",
             overflow: "hidden"
           }}>
-            {/* Decorative Glow (Absolute) */}
+
             <div style={{ position: "absolute", top: "-50%", left: "50%", transform: "translateX(-50%)", width: "60%", height: "100%", background: "radial-gradient(circle, rgba(34, 197, 94, 0.1), transparent 70%)", filter: "blur(60px)", zIndex: 0 }} />
 
-            {/* CONTENT WRAPPER (Relative, zIndex 1) - THIS FIXES THE LAYOUT */}
             <div style={{ position: "relative", zIndex: 1 }}>
               <h2 style={{ fontSize: "3rem", fontWeight: "800", marginBottom: "20px" }}>
                 Ready to settle up?

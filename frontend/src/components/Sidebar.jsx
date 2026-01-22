@@ -1,4 +1,3 @@
-// Sidebar.jsx
 import React, { useState, useEffect } from "react";
 import axiosClient from "../api/axiosClient";
 import { FaWallet } from "react-icons/fa";
@@ -69,13 +68,11 @@ const Sidebar = ({
     setMemberIds([]);
     setShowGroupModal(false);
     onGroupSelected(res.data);
-    // close drawer on mobile after creating group
     if (typeof setMobileOpen === "function") setMobileOpen(false);
   };
 
   return (
     <>
-      {/* Mobile dark overlay */}
       <div
         className={`mobile-overlay ${mobileOpen ? "open" : ""}`}
         onClick={() => setMobileOpen(false)}
@@ -86,7 +83,6 @@ const Sidebar = ({
           <div className="sidebar-logo">
             <FaWallet /> Split<span>Dash</span>
           </div>
-          {/* Close button only visible on mobile via CSS */}
           <button
             className="mobile-close-btn"
             onClick={() => setMobileOpen(false)}
@@ -180,7 +176,6 @@ const Sidebar = ({
               <div
                 onClick={() => {
                   onGroupSelected(g);
-                  // close drawer when selecting group on mobile
                   if (typeof setMobileOpen === "function") setMobileOpen(false);
                 }}
                 style={{ cursor: "pointer" }}

@@ -15,15 +15,9 @@ const DashboardPage = ({ owner, onLogout, sharedGroup, isShared }) => {
   const [expenses, setExpenses] = useState([]);
   const [balances, setBalances] = useState({ simplified: [], perUser: [], pairwise: {} });
   const [friends, setFriends] = useState([]);
-  
-  // 📱 Mobile State
+
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  // 🛠️ PERMISSION LOGIC
-  // 'canEdit' controls the ADD form only.
   const canEdit = !isShared || (currentGroup?.sharePermission === 'editor');
-
-  // 🛠️ USER LIST LOGIC
   const activeUsers = isShared && currentGroup ? currentGroup.members : friends;
 
   const fetchGroupData = useCallback(async (group) => {
@@ -113,9 +107,6 @@ const DashboardPage = ({ owner, onLogout, sharedGroup, isShared }) => {
                   onAfterSettle={() => fetchGroupData(currentGroup)} 
                 />
             )}
-
-            {/* 4. Expense Table */}
-            {/* 👇 FIX: We use '!isShared' so ONLY the Owner sees the Delete button. */}
             <ExpenseTable 
               expenses={expenses} 
               onDelete={!isShared ? handleDeleteExpense : null} 

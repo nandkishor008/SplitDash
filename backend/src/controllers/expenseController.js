@@ -49,18 +49,14 @@ export const getExpensesByGroup = async (req, res) => {
       .populate("participants.user", "name")
       .sort({ createdAt: -1 });
 
-    // ✅ SAFETY FIX: Sanitize the output
-    // If a user was deleted, Mongoose populate returns null.
-    // We replace null with a placeholder object so the Frontend doesn't crash.
     const safeExpenses = expenses.map(e => {
-      const doc = e.toObject(); // Convert to plain JS object
+      const doc = e.toObject(); 
 
-      // Fix missing payer
+      
       if (!doc.paidBy) {
         doc.paidBy = { _id: "deleted", name: "Unknown/Deleted User" };
       }
 
-      // Fix missing participants
       doc.participants = doc.participants.map(p => ({
         ...p,
         user: p.user || { _id: "deleted", name: "Unknown/Deleted User" }

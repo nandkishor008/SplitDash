@@ -21,14 +21,12 @@ const ExpenseTable = ({ expenses, onDelete }) => {
               <th>Amount</th>
               <th>Split</th>
               <th>Participants</th>
-              {/* 👇 Only show this column header if onDelete is provided (Owner only) */}
               {onDelete && <th style={{ width: "50px" }}></th>}
             </tr>
           </thead>
           <tbody>
             {expenses.length === 0 ? (
               <tr>
-                {/* Adjust colSpan based on whether delete column is visible */}
                 <td colSpan={onDelete ? 6 : 5} style={{ textAlign: "center" }}>
                   No expenses yet. Add one above.
                 </td>
@@ -51,7 +49,6 @@ const ExpenseTable = ({ expenses, onDelete }) => {
                       .join(", ")}
                   </td>
                   
-                  {/* 👇 Only show the Delete button cell if onDelete is provided */}
                   {onDelete && (
                     <td>
                       <button

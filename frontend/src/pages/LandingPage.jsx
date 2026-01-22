@@ -6,8 +6,6 @@ import productShot from "../assets/product.png";
 import NavbarPublic from "../components/NavbarPublic";
 import FooterPublic from "../components/FooterPublic";
 
-// --- VISUAL COMPONENTS ---
-
 const FloatingOrb = ({ size, x, y, delay, color }) => (
   <motion.div
     className="orb"
@@ -24,7 +22,7 @@ const TrustBadge = ({ icon, text }) => (
   </div>
 );
 
-// --- NEW SECTIONS COMPONENTS ---
+
 
 const FeatureCard = ({ icon, title, desc, delay }) => (
   <motion.div 
@@ -66,8 +64,6 @@ const FAQItem = ({ question, answer }) => {
   );
 };
 
-// --- MAIN PAGE ---
-
 const LandingPage = () => {
   return (
     <>
@@ -80,12 +76,10 @@ const LandingPage = () => {
 
       <div className="landing-pro" style={{ position: "relative", overflow: "hidden", minHeight: "100vh", background: "#0f0f11", color: "white" }}>
         <NavbarPublic />
-
-        {/* Orbs */}
         <FloatingOrb size={300} x="10%" y="10%" delay={0} color="radial-gradient(circle, #22c55e, transparent)" />
         <FloatingOrb size={250} x="70%" y="20%" delay={2} color="radial-gradient(circle, #3b82f6, transparent)" />
 
-        {/* 1. HERO SECTION (Unchanged from your code) */}
+        {/* 1. HERO SECTION  */}
         <div className="hero-pro" style={{ textAlign: "center", paddingTop: "160px", paddingBottom: "80px", position: "relative", zIndex: 2 }}>
           <motion.div 
             initial={{ opacity: 0, y: -20 }} 

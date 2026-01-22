@@ -22,8 +22,6 @@ const LoginPage = ({ onLoggedIn, onClose }) => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // --- HANDLE CLOSE ---
-  // This ensures the X button always takes you back to the landing page
   const handleClose = () => {
     if (onClose) {
       onClose();
@@ -73,28 +71,28 @@ const LoginPage = ({ onLoggedIn, onClose }) => {
     // 1. OVERLAY (Dark & Blurred)
     <div style={{ 
       position: "fixed", top: 0, left: 0, width: "100%", height: "100%", 
-      background: "rgba(0, 0, 0, 0.7)", // Matches your screenshot's dark overlay
-      backdropFilter: "blur(5px)",      // Subtle blur for the landing page behind
+      background: "rgba(0, 0, 0, 0.7)", 
+      backdropFilter: "blur(5px)",     
       display: "flex", justifyContent: "center", alignItems: "center",
       zIndex: 1000,
       padding: "20px"
     }}>
       
-      {/* 2. MODAL CARD */}
+      
       <motion.div 
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95 }}
         transition={{ duration: 0.2 }}
         style={{ 
-          background: "#0f0f11", // Matches your dark theme (Zinc-950)
+          background: "#0f0f11", 
           padding: "40px", 
           borderRadius: "20px", 
           width: "100%", maxWidth: "420px",
-          border: "1px solid rgba(255,255,255,0.1)", // Subtle border like screenshot
+          border: "1px solid rgba(255,255,255,0.1)", 
           boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
           position: "relative",
-          textAlign: "left" // Left align strictly as per image
+          textAlign: "left" 
         }}
       >
         {/* CLOSE BUTTON (X) */}
@@ -109,7 +107,6 @@ const LoginPage = ({ onLoggedIn, onClose }) => {
           ✕
         </button>
 
-        {/* HEADER */}
         <h2 style={{ color: "white", fontSize: "1.8rem", marginBottom: "10px", fontWeight: "bold", marginTop: 0 }}>
           Welcome to SplitDash
         </h2>
@@ -120,7 +117,6 @@ const LoginPage = ({ onLoggedIn, onClose }) => {
         {/* FORM */}
         <form onSubmit={handleLogin}>
           
-          {/* NAME INPUT */}
           <div style={{ marginBottom: "20px" }}>
             <label style={{ display: "block", color: "#ccc", marginBottom: "8px", fontSize: "0.9rem" }}>Your name</label>
             <input 
@@ -131,7 +127,7 @@ const LoginPage = ({ onLoggedIn, onClose }) => {
               disabled={loading}
               style={{
                 width: "100%", padding: "14px", borderRadius: "10px",
-                background: "#18181b", // Slightly lighter than modal bg
+                background: "#18181b", 
                 border: "1px solid #3f3f46",
                 color: "white", fontSize: "1rem", outline: "none",
                 boxSizing: "border-box"
@@ -162,7 +158,6 @@ const LoginPage = ({ onLoggedIn, onClose }) => {
             />
           </div>
 
-          {/* ERROR MESSAGE */}
           {error && (
             <div style={{ 
               background: "rgba(239, 68, 68, 0.1)", color: "#ef4444", 
@@ -180,7 +175,7 @@ const LoginPage = ({ onLoggedIn, onClose }) => {
             className="cta-btn"
             style={{
               width: "100%", padding: "14px", borderRadius: "10px",
-              background: loading ? "#3f3f46" : "#22c55e", // Solid Green like screenshot
+              background: loading ? "#3f3f46" : "#22c55e", 
               color: loading ? "#888" : "black", 
               fontWeight: "bold", fontSize: "1rem",
               border: "none", cursor: loading ? "not-allowed" : "pointer", 

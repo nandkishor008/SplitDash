@@ -5,10 +5,9 @@ const GroupCard = ({ group, balances, isShared, onGroupUpdated, expenses = [] })
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
   
-  // 🆕 State to track if the link was just copied
+
   const [isCopied, setIsCopied] = useState(false);
 
-  // 🛠️ CALCULATION: Total Trip Expense
   const totalTripExpense = expenses.reduce((acc, curr) => {
     if (curr.category === 'settlement' || curr.description === 'Settle up') return acc;
     const rawValue = curr.totalAmount || curr.amount || 0;
@@ -21,15 +20,11 @@ const GroupCard = ({ group, balances, isShared, onGroupUpdated, expenses = [] })
   const shareLink = `${window.location.origin}/share/${group.shareToken}`;
   const isEditor = group.sharePermission === "editor"; 
 
-  // ✨ IMPROVED COPY FUNCTION
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(shareLink);
       
-      // 1. Change state to show feedback
       setIsCopied(true);
-      
-      // 2. Revert back after 2 seconds
       setTimeout(() => {
         setIsCopied(false);
       }, 2000);
@@ -54,7 +49,7 @@ const GroupCard = ({ group, balances, isShared, onGroupUpdated, expenses = [] })
 
     } catch (err) {
       console.error("Toggle failed:", err);
-      // alert("Failed to update permissions.");
+      
     }
   };
 
@@ -125,11 +120,10 @@ const GroupCard = ({ group, balances, isShared, onGroupUpdated, expenses = [] })
       {/* DESKTOP: Actions */}
       {!isShared && (
         <div className="group-actions-desktop">
-          {/* 👇 UPDATED BUTTON TEXT */}
           <button 
             className="btn btn-secondary" 
             onClick={copyLink}
-            style={{ minWidth: "140px", transition: "all 0.2s" }} // Added width to prevent jumping
+            style={{ minWidth: "140px", transition: "all 0.2s" }} 
           >
             {isCopied ? "✅ Link Copied!" : "🔗 Share Link"}
           </button>
@@ -163,7 +157,6 @@ const GroupCard = ({ group, balances, isShared, onGroupUpdated, expenses = [] })
           
           {showDropdown && (
             <div className="group-dropdown">
-              {/* 👇 UPDATED DROPDOWN TEXT */}
               <button className="dropdown-item" onClick={() => { copyLink(); setShowDropdown(false); }}>
                  {isCopied ? "✅ Link Copied!" : "🔗 Share Link"}
               </button>
