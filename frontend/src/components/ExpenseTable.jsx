@@ -21,13 +21,15 @@ const ExpenseTable = ({ expenses, onDelete }) => {
               <th>Amount</th>
               <th>Split</th>
               <th>Participants</th>
-              <th></th>
+              {/* 👇 Only show this column header if onDelete is provided (Owner only) */}
+              {onDelete && <th style={{ width: "50px" }}></th>}
             </tr>
           </thead>
           <tbody>
             {expenses.length === 0 ? (
               <tr>
-                <td colSpan={6} style={{ textAlign: "center" }}>
+                {/* Adjust colSpan based on whether delete column is visible */}
+                <td colSpan={onDelete ? 6 : 5} style={{ textAlign: "center" }}>
                   No expenses yet. Add one above.
                 </td>
               </tr>
@@ -36,7 +38,7 @@ const ExpenseTable = ({ expenses, onDelete }) => {
                 <tr key={e._id}>
                   <td>{e.description}</td>
                   <td>{e.paidBy?.name || "Unknown"}</td>
-                  <td>₹{e.totalAmount.toFixed(2)}</td>
+                  <td>₹{e.totalAmount?.toFixed(2) || "0.00"}</td>
                   <td>
                     <span className="pill pill-muted">{e.splitType}</span>
                   </td>
@@ -44,20 +46,23 @@ const ExpenseTable = ({ expenses, onDelete }) => {
                     {e.participants
                       .map(
                         (p) =>
-                          `${p.user?.name || "Unknown"} (₹${p.amount.toFixed(
-                            2
-                          )})`
+                          `${p.user?.name || "Unknown"} (₹${p.amount.toFixed(2)})`
                       )
                       .join(", ")}
                   </td>
-                  <td>
-                    <button
-                      className="icon-btn"
-                      onClick={() => onDelete(e._id)}
-                    >
-                      ✕
-                    </button>
-                  </td>
+                  
+                  {/* 👇 Only show the Delete button cell if onDelete is provided */}
+                  {onDelete && (
+                    <td>
+                      <button
+                        className="icon-btn"
+                        onClick={() => onDelete(e._id)}
+                        title="Delete Expense"
+                      >
+                        ✕
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))
             )}

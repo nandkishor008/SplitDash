@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { trackEvent } from "../analytics";
 import axiosClient from "../api/axiosClient";
 import { FaBars } from "react-icons/fa"; 
 
@@ -19,6 +18,13 @@ const DashboardPage = ({ owner, onLogout, sharedGroup, isShared }) => {
   
   // 📱 Mobile State
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  // 🛠️ PERMISSION LOGIC
+  // 'canEdit' controls the ADD form only.
+  const canEdit = !isShared || (currentGroup?.sharePermission === 'editor');
+
+  // 🛠️ USER LIST LOGIC
+  const activeUsers = isShared && currentGroup ? currentGroup.members : friends;
 
   const fetchGroupData = useCallback(async (group) => {
     if (!group?._id) return;
@@ -78,17 +84,27 @@ const DashboardPage = ({ owner, onLogout, sharedGroup, isShared }) => {
 
         {currentGroup ? (
           <>
-            <GroupCard group={currentGroup} balances={balances} isShared={isShared} onGroupUpdated={(g) => setCurrentGroup(g)} />
+            <GroupCard 
+              group={currentGroup} 
+              balances={balances} 
+              isShared={isShared} 
+              onGroupUpdated={(g) => setCurrentGroup(g)} 
+              expenses={expenses} 
+            />
             
-            {/* 1. Add Expense Section (Keep at top) */}
-            {!isShared && (
-                <ExpenseForm group={currentGroup} users={friends} onExpenseAdded={handleExpenseAdded} />
+            {/* 1. Add Expense Form (Visible if Owner OR Editor) */}
+            {canEdit && (
+                <ExpenseForm 
+                  group={currentGroup} 
+                  users={activeUsers} 
+                  onExpenseAdded={handleExpenseAdded} 
+                />
             )}
 
-            {/* 2. Balances Section (Moved UP) */}
-            <BalanceSummary balances={balances} users={isShared && currentGroup ? currentGroup.members : friends} />
+            {/* 2. Balances Section */}
+            <BalanceSummary balances={balances} users={activeUsers} />
 
-            {/* 3. Settle Dues Section (Moved DOWN) */}
+            {/* 3. Settle Dues (Owner Only) */}
             {!isShared && (
                 <SettleModal 
                   group={currentGroup} 
@@ -98,8 +114,13 @@ const DashboardPage = ({ owner, onLogout, sharedGroup, isShared }) => {
                 />
             )}
 
-            {/* 4. Recent Expenses Table (Keep at bottom) */}
-            <ExpenseTable expenses={expenses} onDelete={isShared ? null : handleDeleteExpense} isShared={isShared} />
+            {/* 4. Expense Table */}
+            {/* 👇 FIX: We use '!isShared' so ONLY the Owner sees the Delete button. */}
+            <ExpenseTable 
+              expenses={expenses} 
+              onDelete={!isShared ? handleDeleteExpense : null} 
+              isShared={isShared} 
+            />
           </>
         ) : (
           <div className="card">

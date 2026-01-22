@@ -9,22 +9,23 @@ const BalanceSummary = ({ balances, users }) => {
         <div>
           <div className="card-title">Balances & dues</div>
           <div className="card-sub">
-            Simplified view of who owes whom and how much.
+            Simplified view of who needs to pay and who gets paid.
           </div>
         </div>
       </div>
 
-      <div className="card-content" style={{ display: "flex", gap: "2rem" }}>
+      <div className="card-content" style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}>
         {/* Per user table */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="table-title">Per user</div>
+        <div style={{ flex: 1, minWidth: "300px" }}>
+          <div className="table-title">Per user breakdown</div>
           <div className="scroll-section">
             <table className="table">
               <thead>
                 <tr>
                   <th>User</th>
-                  <th>Owes</th>
-                  <th>Owed</th>
+                  {/* 👇 Renamed Headers for clarity */}
+                  <th style={{ color: "#ef4444" }}>To Pay ↘</th>
+                  <th style={{ color: "#22c55e" }}>To Receive ↗</th>
                 </tr>
               </thead>
               <tbody>
@@ -40,8 +41,16 @@ const BalanceSummary = ({ balances, users }) => {
                     return (
                       <tr key={row.userId}>
                         <td>{u?.name || "Unknown"}</td>
-                        <td>₹{row.owes.toFixed(2)}</td>
-                        <td>₹{row.owed.toFixed(2)}</td>
+                        
+                        {/* 👇 Red for "To Pay" */}
+                        <td style={{ color: "#ef4444", fontWeight: "600" }}>
+                          ₹{row.owes.toFixed(2)}
+                        </td>
+                        
+                        {/* 👇 Green for "To Receive" */}
+                        <td style={{ color: "#22c55e", fontWeight: "600" }}>
+                          ₹{row.owed.toFixed(2)}
+                        </td>
                       </tr>
                     );
                   })
@@ -52,8 +61,8 @@ const BalanceSummary = ({ balances, users }) => {
         </div>
 
         {/* Simplified dues table */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="table-title">Simplified dues</div>
+        <div style={{ flex: 1, minWidth: "300px" }}>
+          <div className="table-title">Who pays whom?</div>
           <div className="scroll-section">
             <table className="table">
               <thead>
@@ -75,7 +84,7 @@ const BalanceSummary = ({ balances, users }) => {
                     <tr key={idx}>
                       <td>{row.fromName}</td>
                       <td>{row.toName}</td>
-                      <td>₹{row.amount.toFixed(2)}</td>
+                      <td style={{ fontWeight: "bold" }}>₹{row.amount.toFixed(2)}</td>
                     </tr>
                   ))
                 )}
